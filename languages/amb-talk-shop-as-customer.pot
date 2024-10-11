@@ -1,0 +1,138 @@
+# Copyright (C) 2024 Amoeba Talk
+# This file is distributed under the same license as the amb-talk-shop-as-customer as a Customer for WooCommerce plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Amoeba Talk create order as a Customer for WooCommerce 1.2.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/amb-talk-shop-as-customer\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-07-25T02:05:36+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.5.0\n"
+"X-Domain: Amoeba Talk create order as a Customer for WooCommerce\n"
+
+#. Plugin Name of the plugin
+msgid "Amoeba Talk create order as a Customer for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://talk.amoeba.site/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Amoeba Talk create order as a Customer allows store administrators to login as a customer on the frontend."
+msgstr ""
+
+#. Author of the plugin
+msgid "Amoeba Talk WP"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://talk.amoeba.site"
+msgstr ""
+
+#. translators: username
+#: amb-talk-shop-as-customer.php:124
+msgid "Logged in as %s"
+msgstr ""
+
+#. translators: username
+#: amb-talk-shop-as-customer.php:124
+msgid "Logout"
+msgstr ""
+
+#. translators: username
+#: amb-talk-shop-as-customer.php:132
+msgid "Back to %s"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:140
+msgid "Switch user"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:150
+msgid "Type any keyword to search..."
+msgstr ""
+
+#. translators: keyword
+#: amb-talk-shop-as-customer.php:206
+msgid "No results found for \"%s\""
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:323
+msgid "Amoeba Talk as a Customer"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:323
+msgid "Premium"
+msgstr ""
+
+#. translators: stars
+#: amb-talk-shop-as-customer.php:326
+msgid "Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating."
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:328
+msgid "Reviews"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:329
+msgid "Changelog"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:330
+msgid "Discussion"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:335
+msgid "Settings updated."
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:341
+#: amb-talk-shop-as-customer.php:435
+msgid "Settings"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:344
+msgid "Essential Kit"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:366
+msgid "General"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:370
+msgid "Who can use it?"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:372
+#: amb-talk-shop-as-customer.php:385
+msgid "Hold down the Ctrl (or Command) button to select multiple options."
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:379
+msgid "Choose the role(s) that are allowed to access and use the user switching functionality."
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:383
+msgid "Who they can switch to?"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:388
+msgid "All"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:393
+msgid "Choose the role(s) that can be searched for and switched to without the need to log out then log in again. Only users with the selected roles will appear in the search box. This allows shop owners to easily view their shop and interact in a different role."
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:394
+msgid "*Warning: Be cautious when assigning the Administrator role to other users.*"
+msgstr ""
+
+#: amb-talk-shop-as-customer.php:451
+msgid "Community support"
+msgstr ""
