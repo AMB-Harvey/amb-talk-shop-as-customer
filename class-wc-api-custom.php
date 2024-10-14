@@ -127,24 +127,44 @@ class WC_API_Custom extends WC_API_Resource
 
         // count
         $count_args = [
-            'meta_query'      => [],
-            'search'          => !empty($search_value) ? '*' . $search_value . '*' : '',
-            'search_columns'  => !empty($search_column) ? [$search_column] : ['ID'],
-            'fields'          => 'ID',
-            'number'          => -1,  // No limit, fetch all orders for counting
-            'customer_id'     => $customerUserId,
+            'meta_query' => [],
+            'search' => !empty($search_value) ? '*' . $search_value . '*' : '',
+            'search_columns' => !empty($search_column) ? [$search_column] : ['ID'],
+            'fields' => 'ID',
+            'number' => -1,  // No limit, fetch all orders for counting
+            'customer_id' => $customerUserId,
         ];
 
         // get unique
         if ($search_column === 'id') {
-            $order = wc_get_order( $search_value );
+            $order = wc_get_order($search_value);
             $orders = [];
+
+            $product_image_url = '';
+
+            foreach ($order->get_items() as $item_id => $item) {
+                $product_id = $item->get_product_id();
+                $product = wc_get_product($product_id);
+
+                if ($product) {
+                    $thumbnail_id = $product->get_image_id();
+                    $thumbnail_url = wp_get_attachment_image_url($thumbnail_id, 'thumbnail');
+                    $product_image_url = esc_url($thumbnail_url);
+                }
+
+                break; // We only need the first product image
+            }
+            $url_checkout_order = wc_get_endpoint_url('order-pay', $order->get_id(), wc_get_page_permalink('checkout')) . '?pay_for_order=true&key=' . $order_key;
+
             $orders[] = [
                 "id" => $order->get_id(),
                 "value" => $order->get_total(),
                 "status" => $order->get_status(),
-                'email'  => $order->get_billing_email(),
+                'email' => $order->get_billing_email(),
                 "date" => $order->get_date_created()->date_i18n('Y-m-d'),
+                'thumbnail_order' => $product_image_url,
+                'url_checkout_order' => $url_checkout_order, // checkout/order-pay
+
             ];
 
             $res['orders'] = $orders;
@@ -159,13 +179,13 @@ class WC_API_Custom extends WC_API_Resource
             $count_args['meta_query'][] = [
                 'relation' => 'OR',
                 [
-                    'key'     => 'billing_phone',
-                    'value'   => (string)$search_value,
+                    'key' => 'billing_phone',
+                    'value' => (string)$search_value,
                     'compare' => 'LIKE'
                 ],
                 [
-                    'key'     => 'phone',
-                    'value'   => (string)$search_value,
+                    'key' => 'phone',
+                    'value' => (string)$search_value,
                     'compare' => 'LIKE'
                 ]
             ];
@@ -189,15 +209,15 @@ class WC_API_Custom extends WC_API_Resource
 
         $totalPages = ceil($totalOrders / $limit);
         $search_args = [
-            'meta_query'     => $count_args['meta_query'],
-            'search'         => $count_args['search'],
+            'meta_query' => $count_args['meta_query'],
+            'search' => $count_args['search'],
             'search_columns' => $count_args['search_columns'],
-            'fields'         => 'all',
-            'offset'         => $offset,
-            'limit'          => $limit,
-            'orderby'        => 'id',
-            'order'          => 'ASC',
-            'customer_id'    => $customerUserId,
+            'fields' => 'all',
+            'offset' => $offset,
+            'limit' => $limit,
+            'orderby' => 'id',
+            'order' => 'ASC',
+            'customer_id' => $customerUserId,
         ];
 
         if ($search_column === 'status') {
@@ -212,13 +232,35 @@ class WC_API_Custom extends WC_API_Resource
         $customerOrderArr = $query->get_orders();
 
         $orders = [];
-       foreach ($customerOrderArr as $order) {
+        foreach ($customerOrderArr as $order) {
+            $product_image_url = '';
+
+            foreach ($order->get_items() as $item_id => $item) {
+                $product_id = $item->get_product_id();
+                $product = wc_get_product($product_id);
+
+                if ($product) {
+                    $thumbnail_id = $product->get_image_id();
+                    $thumbnail_url = wp_get_attachment_image_url($thumbnail_id, 'thumbnail');
+                    $product_image_url = esc_url($thumbnail_url);
+                }
+
+                break; // We only need the first product image
+            }
+
+            // Generate the checkout URL
+            $order_key = $order->get_order_key();
+            $url_checkout_order = wc_get_endpoint_url('order-pay', $order->get_id(), wc_get_page_permalink('checkout')) . '?pay_for_order=true&key=' . $order_key;
+
             $orders[] = [
                 "id" => $order->get_id(),
                 "value" => $order->get_total(),
                 "status" => $order->get_status(),
-                'email'  => $order->get_billing_email(),
+                'email' => $order->get_billing_email(),
                 "date" => $order->get_date_created()->date_i18n('Y-m-d'),
+                'thumbnail_order' => $product_image_url,
+                'url_checkout_order' => $url_checkout_order, // checkout/order-pay
+
             ];
         }
 
@@ -457,10 +499,10 @@ class WC_API_Custom extends WC_API_Resource
         // count
         $count_args = [
             'meta_query' => [],
-            'search'         => !empty($search_value) ? '*' . $search_value . '*' : '',
+            'search' => !empty($search_value) ? '*' . $search_value . '*' : '',
             'search_columns' => !empty($search_column) ? [$search_column] : ['id', 'user_nicename', 'user_email'],
-            'fields'         => 'ID',
-            'number'         => -1
+            'fields' => 'ID',
+            'number' => -1
         ];
 
         // Adjust 'search_columns' based on specific columns
@@ -477,8 +519,8 @@ class WC_API_Custom extends WC_API_Resource
 
         if ($search_column === 'first_name') {
             $count_args['meta_query'][] = [
-                'key'     => 'first_name',
-                'value'   => (string)$search_value,
+                'key' => 'first_name',
+                'value' => (string)$search_value,
                 'compare' => 'LIKE'
             ];
 
@@ -490,13 +532,13 @@ class WC_API_Custom extends WC_API_Resource
             $count_args['meta_query'][] = [
                 'relation' => 'OR',
                 [
-                    'key'     => 'billing_phone',
-                    'value'   => (string)$search_value,
+                    'key' => 'billing_phone',
+                    'value' => (string)$search_value,
                     'compare' => 'LIKE'
                 ],
                 [
-                    'key'     => 'phone',
-                    'value'   => (string)$search_value,
+                    'key' => 'phone',
+                    'value' => (string)$search_value,
                     'compare' => 'LIKE'
                 ]
             ];
@@ -511,15 +553,15 @@ class WC_API_Custom extends WC_API_Resource
         $totalPages = ceil($totalUsers / $limit);
 
         $search_args = [
-            'include'       => isset($count_args['include']) ? $count_args['include'] : [],
-            'meta_query'    => $count_args['meta_query'],
-            'search'         => $count_args['search'],
+            'include' => isset($count_args['include']) ? $count_args['include'] : [],
+            'meta_query' => $count_args['meta_query'],
+            'search' => $count_args['search'],
             'search_columns' => $count_args['search_columns'],
-            'fields'         => ['ID', 'user_email', 'display_name'],
-            'offset'         => $offset,
-            'number'         => $limit,
-            'orderby'        => 'ID',
-            'order'          => 'ASC'
+            'fields' => ['ID', 'user_email', 'display_name'],
+            'offset' => $offset,
+            'number' => $limit,
+            'orderby' => 'ID',
+            'order' => 'ASC'
         ];
 
         $users_query = new WP_User_Query($search_args);
@@ -783,8 +825,6 @@ class WC_API_Custom extends WC_API_Resource
     }
 
 
-
-
     function add_address_book($param)
     {
         $wc_address_book = WC_Address_Book::get_instance();
@@ -1003,13 +1043,13 @@ class WC_API_Custom extends WC_API_Resource
             $item = new WC_Order_Item_Tax();
             $tax_rate_id = $val->tax_rate_id;
             $item->set_props([
-                                 'rate_id' => $tax_rate_id,
-                                 'tax_total' => $val->amount,
-                                 'rate_code' => WC_Tax::get_rate_code($tax_rate_id),
-                                 'label' => WC_Tax::get_rate_label($tax_rate_id),
-                                 'compound' => WC_Tax::is_compound($tax_rate_id),
-                                 'rate_percent' => WC_Tax::get_rate_percent_value($tax_rate_id)
-                             ]);
+                'rate_id' => $tax_rate_id,
+                'tax_total' => $val->amount,
+                'rate_code' => WC_Tax::get_rate_code($tax_rate_id),
+                'label' => WC_Tax::get_rate_label($tax_rate_id),
+                'compound' => WC_Tax::is_compound($tax_rate_id),
+                'rate_percent' => WC_Tax::get_rate_percent_value($tax_rate_id)
+            ]);
             $item->save();
             $order->add_item($item);
         }
