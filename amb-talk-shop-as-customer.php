@@ -66,10 +66,7 @@ if (!function_exists('WC_Gateway_Shop_As_Client')) {
     });
 
     add_filter('woocommerce_available_payment_gateways', function ($available_gateways) {
-        //        error_log(print_r($available_gateways, true)); // Kiểm tra log
-//        if (!current_user_can('administrator')) {
-//            unset($available_gateways['shop_as_client']);
-//        }
+        error_log(print_r($available_gateways, true));
         return $available_gateways;
     });
 
